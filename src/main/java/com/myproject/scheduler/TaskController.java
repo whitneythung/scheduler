@@ -9,14 +9,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-
 /*
- * This class autowires @Tasks and allows GET/Post/Delete operations
+ * This class autowires the Tasks class and allows GET/Post/Delete operations. Autowiring uses dependency injection to connect
+ * Tasks to TaskController. It is NOT the same as inheritance in Object Oriented Programming.
  *
- * String createTask(task, date) { return "success" / "failure" }
- * HashMap<String date, List<String> Task> showTask(date) { return date }
- * showAllTasks(date) { returns String tasks }
- * String deleteTask(date, index) { return "deleted" / "failure" }
+ * Methods in this controller:
+ * - createTask(task, date) { return "success" / "failure" }
+ * - getTask() { returns all Tasks }
+ * - getTasksFromDate(date) { returns tasks.getTasksFromDate(date) / Empty list with message, "unable to get tasks from date" }
+ * - deleteTask(date, index) { return "Success" / "Unable to delete task" }
+ *
+ * Some notes about GET/POST/DELETE operations:
+ * GET is used to view something
+ * POST is used for changing something
+ * DELETE is used to delete something
+ *
+ * Some other notes:
+ * @RequestParam is used to retrieve query parameters
  */
 
 
@@ -27,27 +36,41 @@ public class TaskController {
 
     TaskController(@Autowired Tasks tasks) {
         this.tasks = tasks;
+        // tasks = new TaskFactory().getTask();
+        // inside TaskFactory you still need to have new Task();
     }
 
-    String createTasks(@RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") LocalDate date, List<String> task) {
-        try {
+    @PostMapping("/task")
+    String createTasks(@RequestParam("date") @DateTimeFormat(pattern="mm/dd/yyyy") LocalDate date, @RequestParam("task") String task) {
             tasks.createTask(date, task);
-            return "ok!";
-        }
-        catch(Exception e) {
-             return "Error creating task.";
-        }
+            return "Task successfully created.";
     }
 
+    @GetMapping("/tasks")
     Map<LocalDate, List<String>> getTasks() {
         return tasks.getTasks();
     }
 
-    List<String> getTasksFromDate(LocalDate date) {
-        return tasks.getTasksFromDate(date);
+    //gets task from a specific date
+    @GetMapping("/tasks")
+    List<String> getTasksFromDate(@RequestParam("date") @DateTimeFormat(pattern = "MM/dd/yyy") LocalDate date) {
+       try {
+           return tasks.getTasksFromDate(date);
+       }
+       catch(Exception e) {
+           System.out.println("Unable to get tasks for date : " + date);
+           return Collections.emptyList();
+       }
     }
 
-    String deleteTasks() {
-        return "";
+    @DeleteMapping("/tasks")
+    String deleteTasks(@RequestParam("date") @DateTimeFormat(pattern = "mm/dd/yyyy") LocalDate date, @RequestParam("index") int index) {
+        try {
+            tasks.deleteTask(date, index);
+            return "Successfully deleted task.";
+        }
+        catch(Exception e) {
+            return "Unable to delete task.";
+        }
     }
 }

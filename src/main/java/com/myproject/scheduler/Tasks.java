@@ -14,26 +14,22 @@ import java.util.Map;
  *  map<date, task> getTasks() { return task }
  *  List<String> getTasksFromDate(date) { return tasks}
  *  boolean deleteTask(task) { returns OK / FAIL }
-
  */
 
 @Component
 public class Tasks {
     private Map<LocalDate, List<String>> tasks = new HashMap<>();
 
-    boolean createTask(LocalDate date, List<String> task) {
-        try {
+    boolean createTask(LocalDate date, String task) {
             if (tasks.get(date) == null) {
                 List<String> currentTask = new ArrayList<>();
                 tasks.put(date,currentTask);
+                return true;
             }
-            return true;
-        }
-        catch (Exception e) {
+            else {
             System.out.println("Failed to create task.");
             return false;
         }
-
     }
 
     // This function returns all tasks
