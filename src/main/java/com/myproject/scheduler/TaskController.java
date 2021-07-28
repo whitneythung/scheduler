@@ -41,7 +41,7 @@ public class TaskController {
     }
 
     @PostMapping("/task")
-    String createTasks(@RequestParam("date") @DateTimeFormat(pattern="mm/dd/yyyy") LocalDate date, @RequestParam("task") String task) {
+    String createTasks(@RequestParam("date") @DateTimeFormat(pattern="yyyy-mm-dd") LocalDate date, @RequestParam("task") String task) {
             tasks.createTask(date, task);
             return "Task successfully created.";
     }
@@ -52,8 +52,8 @@ public class TaskController {
     }
 
     //gets task from a specific date
-    @GetMapping("/tasks")
-    List<String> getTasksFromDate(@RequestParam("date") @DateTimeFormat(pattern = "MM/dd/yyy") LocalDate date) {
+    @GetMapping("/task")
+    List<String> getTasksFromDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-mm-dd") LocalDate date) {
        try {
            return tasks.getTasksFromDate(date);
        }
@@ -63,8 +63,8 @@ public class TaskController {
        }
     }
 
-    @DeleteMapping("/tasks")
-    String deleteTasks(@RequestParam("date") @DateTimeFormat(pattern = "mm/dd/yyyy") LocalDate date, @RequestParam("index") int index) {
+    @DeleteMapping("/task")
+    String deleteTasks(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-mm-dd") LocalDate date, @RequestParam("index") int index) {
         try {
             tasks.deleteTask(date, index);
             return "Successfully deleted task.";
