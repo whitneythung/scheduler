@@ -85,9 +85,10 @@ public class TaskTest {
             tasks.createTask(now, TASK_2);
 
             List<String> tasksList = tasks.getTasksFromDate(now);
-            assertEquals(TASK, tasksList.get(0));
             assertEquals(TASK_2, tasksList.get(1));
+            assertEquals(TASK, tasksList.get(0));
             assertEquals(2, tasksList.size());
+
         }
 
         @Test

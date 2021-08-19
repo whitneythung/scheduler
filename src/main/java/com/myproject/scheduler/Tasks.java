@@ -26,15 +26,25 @@ public class Tasks {
 
     boolean createTask(LocalDate date, String task) {
         try {
+            /*
             if (tasks.get(date) == null) {
                 List<String> currentTask = new ArrayList<>();
                 currentTask.add(task);
                 tasks.put(date, currentTask);
-            }
+                return true;
+            } else {
+                //redundant? fix later
+                List<String> newTask = new ArrayList<>();
+                newTask.add(task);
+                tasks.put(date, newTask);
+                return true;
+            } */
+            List<String> tasksOnDate = tasks.computeIfAbsent(date, k -> new ArrayList<>());
+            tasksOnDate.add(task);
             return true;
         }
         catch(Exception e) {
-            System.out.println("Failed to create task.");
+            getLogger().warn("Failed to add task for date {}", date, e);
             return false;
         }
     }
@@ -50,12 +60,13 @@ public class Tasks {
     }
 
     boolean deleteTask(LocalDate date, int index) {
+        List<String> tasksOnDate = tasks.computeIfAbsent(date, k -> new ArrayList<>());
         try {
-            tasks.remove(date, index);
+            tasksOnDate.remove(index);
             return true;
         }
         catch(Exception e) {
-            System.out.println("Unable to remove task.");
+            getLogger().warn("Got exception while trying to remove index {} of tasks on {}", index, date, e);
             return false;
         }
     }

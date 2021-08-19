@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /*
- * This class autowires the Tasks class and allows GET/Post/Delete operations. Autowiring uses dependency injection to connect
+ * This class auto wires the Tasks class and allows GET/Post/Delete operations. Auto wiring uses dependency injection to connect
  * Tasks to TaskController. It is NOT the same as inheritance in Object Oriented Programming.
  *
  * Methods in this controller:
